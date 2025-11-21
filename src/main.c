@@ -2,6 +2,26 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+typedef struct {
+  char *name;
+  struct subcmdArg {
+    char flag;
+    enum subcmdArgType {
+      INT,
+      FLOAT,
+      STRING,
+      BOOL,
+    } type;
+  } *args;
+}subcmd;
+
+// TODO: Finish initializing the valid subcommands and their valid args
+const subcmd validscmds[] = {
+  {"send", {}}
+};
+
+static __thread subcmd scmd;
+
 /**
  * A function which parses the arguments for the type of subcommand the binary is running
  *
