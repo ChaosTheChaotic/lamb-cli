@@ -34,6 +34,7 @@ int main(int argc, char **argv) {
   bool succ = parseType(argc, argv);
   if (!succ) {
     printf("Failed to get a valid subcommand of lambc");
+    return 1;
   } else {
     printf("Completed operation");
   }
