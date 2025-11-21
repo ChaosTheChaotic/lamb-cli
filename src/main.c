@@ -24,8 +24,8 @@ bool parseArgs(int argc, char **argv) {
 */
 bool parseType(int argc, char **argv) {
   for (unsigned i = 0; i < argc; i++) {
-    if (strcasecmp(argv[i], "send")) return true;
-    if (strcasecmp(argv[i], "request")) return true;
+    if (strcasecmp(argv[i], "send") == 0) return true;
+    if (strcasecmp(argv[i], "request") == 0) return true;
   }
   return false;
 }
