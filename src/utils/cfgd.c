@@ -4,7 +4,7 @@
 #include <pwd.h>
 #include <limits.h>
 #include <stdio.h>
-#include "include/cfgd.h"
+#include "cfgd.h"
 
 const char* get_user_config_dir() {
     char path[PATH_MAX];
