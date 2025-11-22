@@ -10,3 +10,9 @@ file(GLOB HEADER_FILES "src/*.h")
 add_executable(lambc ${SOURCE_FILES} ${HEADER_FILES})
 
 target_include_directories(lambc PRIVATE src)
+
+set_target_properties(lambc PROPERTIES C_STANDARD 17)
+
+if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_C_COMPILER_ID MATCHES "Clang")
+    target_compile_options(lambc PRIVATE -Wall -Wextra -Wpedantic -flto)
+endif()
