@@ -19,6 +19,7 @@ set(INCLUDE_CROCO "src/croco/include")
 set(INCLUDE_SEND "src/modes/send/include")
 set(INCLUDE_REQUEST "src/modes/request/include")
 set(INCLUDE_PWDS "src/pwds/include")
+set(INCLUDE_UTILS "src/utils/include")
 
 file(GLOB SOURCE_CLI "src/cli/*.c")
 file(GLOB HEADER_CLI "${INCLUDE_CLI}/*.h")
@@ -34,6 +35,9 @@ file(GLOB HEADER_REQUEST "${INCLUDE_REQUEST}/*.h")
 
 file(GLOB SOURCE_PWDS "src/pwds/*.c")
 file(GLOB HEADER_PWDS "${INCLUDE_PWDS}/*.h")
+
+file(GLOB SOURCE_UTILS "src/utils/*.c")
+file(GLOB HEADER_UTILS "${INCLUDE_UTILS}/*.h")
 
 add_executable(
   lambc
@@ -52,6 +56,9 @@ add_executable(
 
   ${SOURCE_PWDS}
   ${HEADER_PWDS}
+
+  ${SOURCE_UTILS}
+  ${HEADER_UTILS}
 )
 
 target_include_directories(
@@ -62,12 +69,13 @@ target_include_directories(
   ${INCLUDE_SEND}
   ${INCLUDE_REQUEST}
   ${INCLUDE_PWDS}
+  ${INCLUDE_UTILS}
 )
 
 set_target_properties(lambc PROPERTIES C_STANDARD 17)
 
 if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_C_COMPILER_ID MATCHES "Clang")
-    target_compile_options(lambc PRIVATE -Wall -Wextra -Wpedantic -flto -O3)
+    target_compile_options(lambc PRIVATE -Wall -Wextra -Wpedantic -flto -O3 -Wno-strict-prototypes)
 endif()
 
 find_program(GO_EXECUTABLE go REQUIRED)
