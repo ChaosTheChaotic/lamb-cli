@@ -18,7 +18,7 @@ file(GLOB HEADER_CROCO "src/croco/include/*.h")
 
 add_executable(lambc src/main.c ${SOURCE_CLI} ${HEADER_CLI} ${SOURCE_CROCO} ${HEADER_CROCO})
 
-target_include_directories(lambc PRIVATE src)
+target_include_directories(lambc PRIVATE src/croco/include src/cli/include)
 
 set_target_properties(lambc PROPERTIES C_STANDARD 17)
 
