@@ -14,5 +14,5 @@ target_include_directories(lambc PRIVATE src)
 set_target_properties(lambc PROPERTIES C_STANDARD 17)
 
 if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_C_COMPILER_ID MATCHES "Clang")
-    target_compile_options(lambc PRIVATE -Wall -Wextra -Wpedantic -flto)
+    target_compile_options(lambc PRIVATE -Wall -Wextra -Wpedantic -flto -O3)
 endif()
