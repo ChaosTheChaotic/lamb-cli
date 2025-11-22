@@ -1,6 +1,6 @@
 #include <stdio.h>
-#include "cli/include/subcmd.h"
-#include "cli/include/parser.h"
+#include "subcmd.h"
+#include "parser.h"
 
 int main(int argc, char** argv) {
     if (argc < 2) {

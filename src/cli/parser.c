@@ -1,6 +1,6 @@
 #include <string.h>
 #include <stdio.h>
-#include "include/parser.h"
+#include "parser.h"
 
 /**
  * Parses the subcommand type from command line arguments
