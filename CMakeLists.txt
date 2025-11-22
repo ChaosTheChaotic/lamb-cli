@@ -10,10 +10,13 @@ set(CROCO_LIB_DIR "${CMAKE_SOURCE_DIR}/lib")
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin")
 
-file(GLOB SOURCE_FILES "src/*.c")
-file(GLOB HEADER_FILES "src/*.h")
+file(GLOB SOURCE_CLI "src/cli/*.c")
+file(GLOB HEADER_CLI "src/cli/include/*.h")
 
-add_executable(lambc ${SOURCE_FILES} ${HEADER_FILES})
+file(GLOB SOURCE_CROCO "src/croco/*.c")
+file(GLOB HEADER_CROCO "src/croco/include/*.h")
+
+add_executable(lambc ${SOURCE_CLI} ${HEADER_CLI} ${SOURCE_CROCO} ${HEADER_CROCO})
 
 target_include_directories(lambc PRIVATE src)
 

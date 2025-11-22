@@ -1,4 +1,4 @@
-#include "subcmd.h"
+#include "include/subcmd.h"
 
 Arg send_args[] = {
     {'a', BOOL, false, {.bool_val = false}, false}
