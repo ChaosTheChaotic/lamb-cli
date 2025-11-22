@@ -1,62 +1,48 @@
-#include <strings.h>
 #include <stdio.h>
-#include <stdbool.h>
+#include "subcmd.h"
+#include "parser.h"
 
-typedef struct {
-  char *name;
-  struct subcmdArg {
-    char flag;
-    enum subcmdArgType {
-      INT,
-      FLOAT,
-      STRING,
-      BOOL,
-    } type;
-  } *args;
-}subcmd;
+int main(int argc, char** argv) {
+    if (argc < 2) {
+        printf("Usage: %s <subcommand> [flags]\n", argv[0]);
+        return 1;
+    }
 
-// TODO: Finish initializing the valid subcommands and their valid args
-const subcmd validscmds[] = {
-  {"send", {}}
-};
+    SubCommand selected_cmd;
+    if (!parse_type(argc, argv, &selected_cmd)) {
+        printf("Invalid subcommand. Valid commands: ");
+        for (int i = 0; i < subcommand_count; i++) {
+            printf("%s ", valid_subcommands[i].name);
+        }
+        printf("\n");
+        return 1;
+    }
 
-static __thread subcmd scmd;
+    if (!parse_args(argc, argv, &selected_cmd)) {
+        printf("Invalid arguments for subcommand '%s'\n", selected_cmd.name);
+        return 1;
+    }
 
-/**
- * A function which parses the arguments for the type of subcommand the binary is running
- *
- * @param argc the argument count
- * @param argv an array of all the arguments
- * @return false on an invalid arg else true
-*/
-bool parseArgs(int argc, char **argv) {
-  for (unsigned i = 0; i < argc; i++) {
-  }
-  return true;
-}
+    printf("Using mode %s\n", selected_cmd.name);
+    for (int i = 0; i < selected_cmd.arg_count; i++) {
+        if (selected_cmd.args[i].found) {
+            printf("Flag -%c: ", selected_cmd.args[i].flag);
+            switch (selected_cmd.args[i].type) {
+                case BOOL:
+                    printf("%s\n", selected_cmd.args[i].value.bool_val ? "true" : "false");
+                    break;
+                case INT:
+                    printf("%d\n", selected_cmd.args[i].value.int_val);
+                    break;
+                case FLOAT:
+                    printf("%f\n", selected_cmd.args[i].value.float_val);
+                    break;
+                case STRING:
+                    printf("%s\n", selected_cmd.args[i].value.str_val);
+                    break;
+            }
+        }
+    }
 
-/**
-  * A function which parses the type of subcommand the binary should run
-  *
-  * @param argc the amount of args (the argument count)
-  * @param argv an array of all the arguments
-  * @return a boolean which is true if we found a valid subcommand else false
-*/
-bool parseType(int argc, char **argv) {
-  for (unsigned i = 0; i < argc; i++) {
-    if (strcasecmp(argv[i], "send") == 0) return true;
-    if (strcasecmp(argv[i], "request") == 0) return true;
-  }
-  return false;
-}
-
-int main(int argc, char **argv) {
-  bool succ = parseType(argc, argv);
-  if (!succ) {
-    printf("Failed to get a valid subcommand of lambc");
-    return 1;
-  } else {
-    printf("Completed operation");
-  }
-  return 0;
+    return 0;
 }
