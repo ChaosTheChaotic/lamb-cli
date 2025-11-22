@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include "subcmd.h"
 #include "parser.h"
 
@@ -24,25 +25,10 @@ int main(int argc, char** argv) {
     }
 
     printf("Using mode %s\n", selected_cmd.name);
-    for (int i = 0; i < selected_cmd.arg_count; i++) {
-        if (selected_cmd.args[i].found) {
-            printf("Flag -%c: ", selected_cmd.args[i].flag);
-            switch (selected_cmd.args[i].type) {
-                case BOOL:
-                    printf("%s\n", selected_cmd.args[i].value.bool_val ? "true" : "false");
-                    break;
-                case INT:
-                    printf("%d\n", selected_cmd.args[i].value.int_val);
-                    break;
-                case FLOAT:
-                    printf("%f\n", selected_cmd.args[i].value.float_val);
-                    break;
-                case STRING:
-                    printf("%s\n", selected_cmd.args[i].value.str_val);
-                    break;
-            }
-        }
+    if (strcmp(selected_cmd.name, "send") == 0) {
+      // Call send function here
+    } else if (strcmp(selected_cmd.name, "request") == 0) {
+      // Call request function here
     }
-
     return 0;
 }

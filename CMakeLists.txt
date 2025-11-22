@@ -12,15 +12,40 @@ set(CROCO_LIB_DIR "${CMAKE_SOURCE_DIR}/lib")
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin")
 
+set(INCLUDE_CLI "src/cli/include")
+set(INCLUDE_CROCO "src/croco/include")
+set(INCLUDE_SEND "src/modes/send/include")
+set(INCLUDE_REQUEST "src/modes/request/include")
+
 file(GLOB SOURCE_CLI "src/cli/*.c")
-file(GLOB HEADER_CLI "src/cli/include/*.h")
+file(GLOB HEADER_CLI "${INCLUDE_CLI}/*.h")
 
 file(GLOB SOURCE_CROCO "src/croco/*.c")
-file(GLOB HEADER_CROCO "src/croco/include/*.h")
+file(GLOB HEADER_CROCO "${INCLUDE_CROCO}/*.h")
 
-add_executable(lambc src/main.c ${SOURCE_CLI} ${HEADER_CLI} ${SOURCE_CROCO} ${HEADER_CROCO})
+file(GLOB SOURCE_SEND "src/modes/send/*.c")
+file(GLOB HEADER_SEND "${INCLUDE_SEND}/*.h")
 
-target_include_directories(lambc PRIVATE src/croco/include src/cli/include)
+file(GLOB SOURCE_REQUEST "src/modes/request/*.c")
+file(GLOB HEADER_REQUEST "${INCLUDE_REQUEST}/*.h")
+
+add_executable(
+  lambc 
+  src/main.c 
+  ${SOURCE_CLI} 
+  ${HEADER_CLI} 
+
+  ${SOURCE_CROCO} 
+  ${HEADER_CROCO} 
+
+  ${SOURCE_SEND} 
+  ${HEADER_SEND} 
+
+  ${SOURCE_REQUEST}
+  ${HEADER_REQUEST}
+)
+
+target_include_directories(lambc PRIVATE ${INCLUDE_CLI} ${INCLUDE_CROCO} ${INCLUDE_SEND} ${INCLUDE_REQUEST})
 
 set_target_properties(lambc PROPERTIES C_STANDARD 17)
 
