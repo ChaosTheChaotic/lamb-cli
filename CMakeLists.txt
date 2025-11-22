@@ -16,6 +16,7 @@ set(INCLUDE_CLI "src/cli/include")
 set(INCLUDE_CROCO "src/croco/include")
 set(INCLUDE_SEND "src/modes/send/include")
 set(INCLUDE_REQUEST "src/modes/request/include")
+set(INCLUDE_PWDS "src/pwds/include")
 
 file(GLOB SOURCE_CLI "src/cli/*.c")
 file(GLOB HEADER_CLI "${INCLUDE_CLI}/*.h")
@@ -29,23 +30,36 @@ file(GLOB HEADER_SEND "${INCLUDE_SEND}/*.h")
 file(GLOB SOURCE_REQUEST "src/modes/request/*.c")
 file(GLOB HEADER_REQUEST "${INCLUDE_REQUEST}/*.h")
 
+file(GLOB SOURCE_PWDS "src/pwds/*.c")
+file(GLOB HEADER_PWDS "${INCLUDE_PWDS}/*.h")
+
 add_executable(
-  lambc 
-  src/main.c 
-  ${SOURCE_CLI} 
-  ${HEADER_CLI} 
+  lambc
+  src/main.c
+  ${SOURCE_CLI}
+  ${HEADER_CLI}
 
-  ${SOURCE_CROCO} 
-  ${HEADER_CROCO} 
+  ${SOURCE_CROCO}
+  ${HEADER_CROCO}
 
-  ${SOURCE_SEND} 
-  ${HEADER_SEND} 
+  ${SOURCE_SEND}
+  ${HEADER_SEND}
 
   ${SOURCE_REQUEST}
   ${HEADER_REQUEST}
+
+  ${SOURCE_PWDS}
+  ${HEADER_PWDS}
 )
 
-target_include_directories(lambc PRIVATE ${INCLUDE_CLI} ${INCLUDE_CROCO} ${INCLUDE_SEND} ${INCLUDE_REQUEST})
+target_include_directories(
+  lambc
+  PRIVATE
+  ${INCLUDE_CLI}
+  ${INCLUDE_CROCO}
+  ${INCLUDE_SEND}
+  ${INCLUDE_REQUEST}
+)
 
 set_target_properties(lambc PROPERTIES C_STANDARD 17)
 
