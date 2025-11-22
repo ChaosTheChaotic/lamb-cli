@@ -6,6 +6,8 @@ project("lamb-cli")
 
 include(ExternalProject)
 
+find_package(OpenSSL COMPONENTS Crypto REQUIRED)
+
 set(CROCO_DIR "${CMAKE_SOURCE_DIR}/vendor/croco")
 set(CROCO_BUILD_DIR "${CMAKE_BINARY_DIR}/croco")
 set(CROCO_LIB_DIR "${CMAKE_SOURCE_DIR}/lib")
@@ -59,6 +61,7 @@ target_include_directories(
   ${INCLUDE_CROCO}
   ${INCLUDE_SEND}
   ${INCLUDE_REQUEST}
+  ${INCLUDE_PWDS}
 )
 
 set_target_properties(lambc PROPERTIES C_STANDARD 17)
@@ -92,4 +95,4 @@ add_custom_target(croco_lib ALL DEPENDS ${CROCO_LIB_DIR}/libcroco.so)
 
 add_dependencies(lambc croco_lib)
 target_link_directories(lambc PRIVATE ${CROCO_LIB_DIR})
-target_link_libraries(lambc PRIVATE croco)
+target_link_libraries(lambc PRIVATE croco OpenSSL::Crypto)
