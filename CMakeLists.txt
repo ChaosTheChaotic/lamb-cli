@@ -16,7 +16,7 @@ file(GLOB HEADER_CLI "src/cli/include/*.h")
 file(GLOB SOURCE_CROCO "src/croco/*.c")
 file(GLOB HEADER_CROCO "src/croco/include/*.h")
 
-add_executable(lambc ${SOURCE_CLI} ${HEADER_CLI} ${SOURCE_CROCO} ${HEADER_CROCO})
+add_executable(lambc src/main.c ${SOURCE_CLI} ${HEADER_CLI} ${SOURCE_CROCO} ${HEADER_CROCO})
 
 target_include_directories(lambc PRIVATE src)
 
