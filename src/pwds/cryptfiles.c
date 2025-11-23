@@ -5,6 +5,13 @@
 #include <stdlib.h>
 #include "pwds.h"
 
+/**
+ * Write encrypted passwords
+ *
+ * @param encd encrypted data to be written into the file
+ * @param encl the length of the encrypted data
+ * @return 0 on success else -1
+*/
 int wencp(const unsigned char *restrict encd, unsigned int encl) {
   const char *restrict cfgd = get_user_config_dir();
   if (mkdir(cfgd, 0700)) { // If non-zero exit
@@ -31,6 +38,13 @@ int wencp(const unsigned char *restrict encd, unsigned int encl) {
   return 0;
 }
 
+/**
+ * Read encrypted passwords form the dedicated password file
+ *
+ * @param encd encrypted data into which the data will be read into
+ * @param encl the length of the encrypted data which gets written into it
+ * @return 0 on success else -1
+*/
 int rencp(unsigned char **restrict encd, unsigned int *restrict encl) {
   const char *fpath = get_password_file();
   FILE *fp = fopen(fpath, "rb");

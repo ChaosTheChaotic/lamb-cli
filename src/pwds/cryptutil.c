@@ -5,6 +5,14 @@
 #include <sys/stat.h>
 #include "pwds.h"
 
+/**
+ * Encryts a password using evp
+ *
+ * @param plaintext the plain text form of the password
+ * @param key an encryption key to be used to encrypt the data
+ * @param cptxt a buffer into which the encrypted data will be written to
+ * @param ctpxt_len the length of the encrypted data which gets written in
+*/
 int epwd(
   const char *restrict plaintext,
   const char *restrict key,
@@ -55,6 +63,14 @@ int epwd(
   return 0;
 }
 
+/**
+ * Decrypts a password
+ *
+ * @param cptxt the encrypted data which needs to get decrypted
+ * @param cptxt_len the length of the encrypted data
+ * @param key the key which was used to encrypt the password
+ * @param plaintext a buffer into which the plain text of the password will be written into
+*/
 int dpwd(
   const unsigned char *restrict cptxt,
   unsigned int cptxt_len,
