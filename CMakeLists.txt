@@ -91,7 +91,7 @@ ExternalProject_Add(croco_external
     BUILD_COMMAND ${GO_EXECUTABLE} build -buildmode=c-shared -o ${CROCO_BUILD_DIR}/libcroco.so croco_clib.go
     INSTALL_COMMAND ""
     BUILD_BYPRODUCTS ${CROCO_BUILD_DIR}/libcroco.so
-    ${BUILD_OFFLINE:UPDATE_DISCONNECTED 1}
+    UPDATE_DISCONNECTED ${BUILD_OFFLINE}
 )
 
 # Create lib directory and copy library
