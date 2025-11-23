@@ -1,13 +1,15 @@
 #include <openssl/evp.h>
 #include <openssl/rand.h>
+#include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
 #include "pwds.h"
 
 int epwd(
   const char *restrict plaintext,
   const char *restrict key,
   unsigned char *restrict *restrict cptxt,
-  int *restrict cptxt_len
+  unsigned int *restrict cptxt_len
 ) {
   EVP_CIPHER_CTX *ctx;
   int len;
@@ -36,12 +38,14 @@ int epwd(
 
   if (EVP_EncryptUpdate(ctx, *cptxt + EVP_MAX_IV_LENGTH, &len, (unsigned char *restrict)plaintext, ptl) != 1) {
       free(*cptxt);
+      *cptxt = NULL;
       EVP_CIPHER_CTX_free(ctx);
       return -1;
   }
   *cptxt_len = len + EVP_MAX_IV_LENGTH;
   if (EVP_EncryptFinal_ex(ctx, *cptxt + *cptxt_len, &len) != 1) {
       free(*cptxt);
+      *cptxt = NULL;
       EVP_CIPHER_CTX_free(ctx);
       return -1;
   }
@@ -53,11 +57,11 @@ int epwd(
 
 int dpwd(
   const unsigned char *restrict cptxt,
-  int cptxt_len,
+  unsigned int cptxt_len,
   const char *restrict key,
   char *restrict *restrict plaintext
 ) {
-  EVP_CIPHER_CTX *ctx;
+  EVP_CIPHER_CTX *ctx = NULL;
   int len;
   int plaintext_len;
 
@@ -90,6 +94,7 @@ int dpwd(
   if (EVP_DecryptUpdate(ctx, (unsigned char *restrict)*plaintext, &len, 
                        encrypted_data, encrypted_data_len) != 1) {
     free(*plaintext);
+    *plaintext = NULL;
     EVP_CIPHER_CTX_free(ctx);
     return -1;
   }
@@ -98,6 +103,7 @@ int dpwd(
   // Finalize decryption
   if (EVP_DecryptFinal_ex(ctx, (unsigned char *restrict)*plaintext + plaintext_len, &len) != 1) {
     free(*plaintext);
+    *plaintext = NULL;
     EVP_CIPHER_CTX_free(ctx);
     return -1;
   }
