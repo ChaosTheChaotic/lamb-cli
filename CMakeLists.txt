@@ -4,6 +4,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 project("lamb-cli")
 
+option(BUILD_OFFLINE "Build the croco library using the local version (use if you want to skip update or have no wifi)" OFF)
+
 include(ExternalProject)
 
 find_package(OpenSSL COMPONENTS Crypto REQUIRED)
@@ -89,6 +91,7 @@ ExternalProject_Add(croco_external
     BUILD_COMMAND ${GO_EXECUTABLE} build -buildmode=c-shared -o ${CROCO_BUILD_DIR}/libcroco.so croco_clib.go
     INSTALL_COMMAND ""
     BUILD_BYPRODUCTS ${CROCO_BUILD_DIR}/libcroco.so
+    ${BUILD_OFFLINE:UPDATE_DISCONNECTED 1}
 )
 
 # Create lib directory and copy library
