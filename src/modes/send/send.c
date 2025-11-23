@@ -49,6 +49,8 @@ int send(unsigned int argc, Arg *args) {
     }
   }
 
+  // Decrypt and use password
+
   if (cliflag) {
     free(msg);
   }
