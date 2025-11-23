@@ -52,4 +52,5 @@ int send(unsigned int argc, Arg *args) {
   if (cliflag) {
     free(msg);
   }
+  return 0;
 }
