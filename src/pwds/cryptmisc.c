@@ -23,20 +23,20 @@ int getpwds(char *restrict pwd) {
   unsigned char key[32];
   if (genrndkey(key, sizeof(key)) == -1) {
     fprintf(stderr, "Failed to get random number from /dev/urandom\nFalling back to the rand function");
-    srand(time(NULL));
+    srand(time(NULL)); // Seed the generator with the current time
     for (size_t i = 0; i < sizeof(key); i++) {
-      key[i] = (unsigned char)rand(); // Generate pseudo random bytes
+      key[i] = (unsigned char)rand(); // Generate pseudo random bytes as a fallback
     }
   }
   unsigned char *cptxt = NULL;
   unsigned int len = 0;
   if (epwd(uencp, (const char *)key, &cptxt, &len) != 0) {
-    fprintf(stderr, "Failed to encrypt password, not writing to file");
+    fprintf(stderr, "Failed to encrypt password, not writing to file, you will have to reinput the password upon future reruns");
     return -1;
   }
 
   if (wencp(cptxt, len) != 0) {
-    fprintf(stderr, "Failed to write encrypted password to file");
+    fprintf(stderr, "Failed to write encrypted password to file, you will have to reinput the password upon future reruns");
     return -1;
   }
   return 0;

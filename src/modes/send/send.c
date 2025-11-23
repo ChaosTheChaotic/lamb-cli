@@ -22,8 +22,6 @@ int send(unsigned int argc, Arg *args) {
   // If we dont have a message prompt user for one
   if (msg == NULL || strcmp(msg, "Hello, world!") == 0) {
     cliflag = true;
-    // the getline function mallocs a string
-    // dont forget to free buf
     msg = NULL; // Set msg to null so getline mallocs
     size_t size = 0;
     ssize_t getle = getline(&msg, &size, stdin);
@@ -42,6 +40,13 @@ int send(unsigned int argc, Arg *args) {
   unsigned int encl;
   if (rencp(&encd, &encl) != 0) {
     printf("No password file found.");
+    if (getpwds(pwd) != 0) {
+      fprintf(stderr, "Failed to prompt for password, cannot continue");
+      if (cliflag) {
+	free(msg);
+      }
+      exit(1);
+    }
   }
 
   if (cliflag) {
