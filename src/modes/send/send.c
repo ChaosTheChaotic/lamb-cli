@@ -8,7 +8,7 @@
 
 int send(unsigned int argc, Arg *args) {
   char *msg = NULL;
-  char *pwd = NULL;
+  char *restrict pwd = NULL;
   bool cliflag = false;
   bool promptd = false;
 
@@ -36,16 +36,16 @@ int send(unsigned int argc, Arg *args) {
     }
   }
 
-  char *restrict pbuf = get_pwd();
-  if (!pbuf) {
+  pwd = get_pwd();
+  if (!pwd) {
     promptd = true;
-    prompt_pwd("Enter password (must be same as android): ", pbuf);
+    prompt_pwd("Enter password (must be same as android): ", pwd);
   }
 
-  char *res = SendText(msg, pbuf);
+  char *res = SendText(msg, pwd);
   printf("%s", res);
 
   if (cliflag) free(msg);
-  if (promptd) free(pbuf);
+  if (promptd) free(pwd);
   return 0;
 }
