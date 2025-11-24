@@ -2,7 +2,8 @@
 
 Arg send_args[] = {
     {'a', BOOL, false, {.bool_val = false}, false},
-    {'m', STRING, false, {.str_val = "Hello, world!"}, false},
+    {'m', STRING, false, {.str_val = ""}, false},
+    {'p', STRING, false, {.str_val = ""}, false},
 };
 const int send_arg_count = sizeof(send_args) / sizeof(Arg);
 

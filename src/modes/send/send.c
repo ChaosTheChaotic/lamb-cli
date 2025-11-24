@@ -21,7 +21,7 @@ int send(unsigned int argc, Arg *args) {
   }
 
   // If we dont have a message prompt user for one
-  if (msg == NULL || strcmp(msg, "Hello, world!") == 0) {
+  if (msg == NULL || msg[0] == '\0') {
     cliflag = true;
     msg = NULL; // Set msg to null so getline mallocs
     size_t size = 0;
