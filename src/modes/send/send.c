@@ -1,7 +1,6 @@
 #include "libcrocou.h"
 #include <stdio.h>
 #include "subcmd.h"
-#include "pwds.h"
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -35,21 +34,7 @@ int send(unsigned int argc, Arg *args) {
     }
   }
 
-  // Check if we have a password
-  unsigned char *encd;
-  unsigned int encl;
-  if (rencp(&encd, &encl) != 0) {
-    printf("No password file found.");
-    if (getpwds(pwd) != 0) {
-      fprintf(stderr, "Failed to prompt for password, cannot continue");
-      if (cliflag) {
-	free(msg);
-      }
-      exit(1);
-    }
-  }
-
-  // Decrypt and use password
+  // Get password
 
   if (cliflag) {
     free(msg);
