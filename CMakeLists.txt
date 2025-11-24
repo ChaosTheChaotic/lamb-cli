@@ -19,6 +19,7 @@ set(INCLUDE_CROCO "src/croco/include")
 set(INCLUDE_SEND "src/modes/send/include")
 set(INCLUDE_REQUEST "src/modes/request/include")
 set(INCLUDE_UTILS "src/utils/include")
+set(INCLUDE_KEYS "src/keys/include")
 
 file(GLOB SOURCE_CLI "src/cli/*.c")
 file(GLOB HEADER_CLI "${INCLUDE_CLI}/*.h")
@@ -34,6 +35,9 @@ file(GLOB HEADER_REQUEST "${INCLUDE_REQUEST}/*.h")
 
 file(GLOB SOURCE_UTILS "src/utils/*.c")
 file(GLOB HEADER_UTILS "${INCLUDE_UTILS}/*.h")
+
+file(GLOB SOURCE_KEYS "src/keys/*.c")
+file(GLOB HEADER_KEYS "${INCLUDE_KEYS}/*.h")
 
 add_executable(
   lambc
@@ -52,6 +56,9 @@ add_executable(
 
   ${SOURCE_UTILS}
   ${HEADER_UTILS}
+
+  ${SOURCE_KEYS}
+  ${HEADER_KEYS}
 )
 
 target_include_directories(
@@ -62,6 +69,7 @@ target_include_directories(
   ${INCLUDE_SEND}
   ${INCLUDE_REQUEST}
   ${INCLUDE_UTILS}
+  ${INCLUDE_KEYS}
 )
 
 set_target_properties(lambc PROPERTIES C_STANDARD 17)
