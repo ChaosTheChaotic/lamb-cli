@@ -1,6 +1,7 @@
 #include "libcrocou.h"
-#include <stdio.h>
 #include "subcmd.h"
+#include "keys.h"
+#include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -9,6 +10,7 @@ int send(unsigned int argc, Arg *args) {
   char *msg = NULL;
   char *pwd = NULL;
   bool cliflag = false;
+  bool promptd = false;
 
   for (unsigned int i = 0; i < argc; i++) {
     if (args[i].flag == 'm' && args[i].found) {
@@ -34,10 +36,16 @@ int send(unsigned int argc, Arg *args) {
     }
   }
 
-  // Get password
-
-  if (cliflag) {
-    free(msg);
+  char *restrict pbuf = get_pwd();
+  if (!pbuf) {
+    promptd = true;
+    prompt_pwd("Enter password (must be same as android): ", pbuf);
   }
+
+  char *res = SendText(msg, pbuf);
+  printf("%s", res);
+
+  if (cliflag) free(msg);
+  if (promptd) free(pbuf);
   return 0;
 }
