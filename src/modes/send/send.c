@@ -41,7 +41,7 @@ int send(unsigned int argc, Arg *args) {
 
   if (!np) pwd = get_pwd();
   if (!pwd) {
-    prompt_pwd("Enter password (must be same as android): ", pwd);
+    prompt_pwd("Enter password (must be same as android): ", &pwd);
   }
 
   char *res = SendText(msg, pwd);

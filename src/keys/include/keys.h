@@ -7,6 +7,6 @@ char *get_pwd();
 
 int clear_pwd();
 
-int prompt_pwd(const char *restrict prompt, char *restrict pbuf);
+int prompt_pwd(const char *restrict prompt, char *restrict *restrict pbuf);
 
 #endif

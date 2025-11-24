@@ -49,10 +49,10 @@ int clear_pwd(void) {
     return syscall(SYS_keyctl, KEYCTL_UNLINK, key_id, KEY_SPEC_SESSION_KEYRING);
 }
 
-int prompt_pwd(const char *restrict prompt, char *restrict pbuf) {
+int prompt_pwd(const char *restrict prompt, char *restrict *restrict pbuf) {
   const char *restrict pwd = getpass(prompt);
-  pbuf = strdup(pwd);
-  if (!pbuf) {
+  *pbuf = strdup(pwd);
+  if (!*pbuf) {
     fprintf(stderr, "Failed to malloc for pbuf, exiting");
     exit(1);
   }
