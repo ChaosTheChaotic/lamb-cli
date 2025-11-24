@@ -25,6 +25,7 @@ int send(unsigned int argc, Arg *args) {
     cliflag = true;
     msg = NULL; // Set msg to null so getline mallocs
     size_t size = 0;
+    printf("Enter the message you want to send: ");
     ssize_t getle = getline(&msg, &size, stdin);
     if (getle == -1) {
       fprintf(stderr, "Failed to get user input using getline, try to specify a message using the -m flag");
