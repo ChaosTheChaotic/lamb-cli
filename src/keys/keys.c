@@ -2,6 +2,7 @@
 #include <linux/keyctl.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 #include <sys/syscall.h>
 #include "keys.h"
 
@@ -50,6 +51,10 @@ int clear_pwd(void) {
 
 int prompt_pwd(const char *restrict prompt, char *restrict pbuf) {
   const char *restrict pwd = getpass(prompt);
-  strcpy(pbuf, pwd);
+  pbuf = strdup(pwd);
+  if (!pbuf) {
+    fprintf(stderr, "Failed to malloc for pbuf, exiting");
+    exit(1);
+  }
   return store_pwd(pwd);
 }
