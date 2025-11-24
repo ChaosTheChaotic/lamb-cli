@@ -10,12 +10,15 @@ int send(unsigned int argc, Arg *args) {
   char *msg = NULL;
   char *restrict pwd = NULL;
   bool cliflag = false;
+  bool np = false;
 
   for (unsigned int i = 0; i < argc; i++) {
     if (args[i].flag == 'm' && args[i].found) {
       cliflag = true;
       msg = args[i].value.str_val;
       break;
+    } else if (args[i].flag == 'p' && args[i].found) {
+      np = true;
     }
   }
 
@@ -36,7 +39,7 @@ int send(unsigned int argc, Arg *args) {
     }
   }
 
-  pwd = get_pwd();
+  if (!np) pwd = get_pwd();
   if (!pwd) {
     prompt_pwd("Enter password (must be same as android): ", pwd);
   }

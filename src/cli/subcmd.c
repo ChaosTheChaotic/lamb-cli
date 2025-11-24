@@ -3,7 +3,7 @@
 Arg send_args[] = {
     {'a', BOOL, false, {.bool_val = false}, false}, // TODO: Implement async
     {'m', STRING, false, {.str_val = ""}, false}, // Message flag
-    {'p', STRING, false, {.str_val = ""}, false}, // Password flag (specify a new password to save)
+    {'p', BOOL, false, {.bool_val = false}, false}, // Password flag (specify a new password to save)
 };
 const int send_arg_count = sizeof(send_args) / sizeof(Arg);
 
