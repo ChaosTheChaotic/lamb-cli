@@ -1,49 +1,31 @@
 [
 {
   "directory": "/home/chaos/lamb-cli/build",
-  "command": "/etc/profiles/per-user/chaos/bin/cc  -I/home/chaos/lamb-cli/src/cli/include -I/home/chaos/lamb-cli/src/croco/include -I/home/chaos/lamb-cli/src/modes/send/include -I/home/chaos/lamb-cli/src/modes/request/include -I/home/chaos/lamb-cli/src/pwds/include -I/home/chaos/lamb-cli/src/utils/include -Wall -Wextra -Wpedantic -flto -O3 -Wno-strict-prototypes -o CMakeFiles/lambc.dir/src/main.c.o -c /home/chaos/lamb-cli/src/main.c",
+  "command": "/etc/profiles/per-user/chaos/bin/cc  -I/home/chaos/lamb-cli/src/cli/include -I/home/chaos/lamb-cli/src/croco/include -I/home/chaos/lamb-cli/src/modes/send/include -I/home/chaos/lamb-cli/src/modes/request/include -I/home/chaos/lamb-cli/src/utils/include -Wall -Wextra -Wpedantic -flto -O3 -Wno-strict-prototypes -o CMakeFiles/lambc.dir/src/main.c.o -c /home/chaos/lamb-cli/src/main.c",
   "file": "/home/chaos/lamb-cli/src/main.c",
   "output": "CMakeFiles/lambc.dir/src/main.c.o"
 },
 {
   "directory": "/home/chaos/lamb-cli/build",
-  "command": "/etc/profiles/per-user/chaos/bin/cc  -I/home/chaos/lamb-cli/src/cli/include -I/home/chaos/lamb-cli/src/croco/include -I/home/chaos/lamb-cli/src/modes/send/include -I/home/chaos/lamb-cli/src/modes/request/include -I/home/chaos/lamb-cli/src/pwds/include -I/home/chaos/lamb-cli/src/utils/include -Wall -Wextra -Wpedantic -flto -O3 -Wno-strict-prototypes -o CMakeFiles/lambc.dir/src/cli/parser.c.o -c /home/chaos/lamb-cli/src/cli/parser.c",
+  "command": "/etc/profiles/per-user/chaos/bin/cc  -I/home/chaos/lamb-cli/src/cli/include -I/home/chaos/lamb-cli/src/croco/include -I/home/chaos/lamb-cli/src/modes/send/include -I/home/chaos/lamb-cli/src/modes/request/include -I/home/chaos/lamb-cli/src/utils/include -Wall -Wextra -Wpedantic -flto -O3 -Wno-strict-prototypes -o CMakeFiles/lambc.dir/src/cli/parser.c.o -c /home/chaos/lamb-cli/src/cli/parser.c",
   "file": "/home/chaos/lamb-cli/src/cli/parser.c",
   "output": "CMakeFiles/lambc.dir/src/cli/parser.c.o"
 },
 {
   "directory": "/home/chaos/lamb-cli/build",
-  "command": "/etc/profiles/per-user/chaos/bin/cc  -I/home/chaos/lamb-cli/src/cli/include -I/home/chaos/lamb-cli/src/croco/include -I/home/chaos/lamb-cli/src/modes/send/include -I/home/chaos/lamb-cli/src/modes/request/include -I/home/chaos/lamb-cli/src/pwds/include -I/home/chaos/lamb-cli/src/utils/include -Wall -Wextra -Wpedantic -flto -O3 -Wno-strict-prototypes -o CMakeFiles/lambc.dir/src/cli/subcmd.c.o -c /home/chaos/lamb-cli/src/cli/subcmd.c",
+  "command": "/etc/profiles/per-user/chaos/bin/cc  -I/home/chaos/lamb-cli/src/cli/include -I/home/chaos/lamb-cli/src/croco/include -I/home/chaos/lamb-cli/src/modes/send/include -I/home/chaos/lamb-cli/src/modes/request/include -I/home/chaos/lamb-cli/src/utils/include -Wall -Wextra -Wpedantic -flto -O3 -Wno-strict-prototypes -o CMakeFiles/lambc.dir/src/cli/subcmd.c.o -c /home/chaos/lamb-cli/src/cli/subcmd.c",
   "file": "/home/chaos/lamb-cli/src/cli/subcmd.c",
   "output": "CMakeFiles/lambc.dir/src/cli/subcmd.c.o"
 },
 {
   "directory": "/home/chaos/lamb-cli/build",
-  "command": "/etc/profiles/per-user/chaos/bin/cc  -I/home/chaos/lamb-cli/src/cli/include -I/home/chaos/lamb-cli/src/croco/include -I/home/chaos/lamb-cli/src/modes/send/include -I/home/chaos/lamb-cli/src/modes/request/include -I/home/chaos/lamb-cli/src/pwds/include -I/home/chaos/lamb-cli/src/utils/include -Wall -Wextra -Wpedantic -flto -O3 -Wno-strict-prototypes -o CMakeFiles/lambc.dir/src/modes/send/send.c.o -c /home/chaos/lamb-cli/src/modes/send/send.c",
+  "command": "/etc/profiles/per-user/chaos/bin/cc  -I/home/chaos/lamb-cli/src/cli/include -I/home/chaos/lamb-cli/src/croco/include -I/home/chaos/lamb-cli/src/modes/send/include -I/home/chaos/lamb-cli/src/modes/request/include -I/home/chaos/lamb-cli/src/utils/include -Wall -Wextra -Wpedantic -flto -O3 -Wno-strict-prototypes -o CMakeFiles/lambc.dir/src/modes/send/send.c.o -c /home/chaos/lamb-cli/src/modes/send/send.c",
   "file": "/home/chaos/lamb-cli/src/modes/send/send.c",
   "output": "CMakeFiles/lambc.dir/src/modes/send/send.c.o"
 },
 {
   "directory": "/home/chaos/lamb-cli/build",
-  "command": "/etc/profiles/per-user/chaos/bin/cc  -I/home/chaos/lamb-cli/src/cli/include -I/home/chaos/lamb-cli/src/croco/include -I/home/chaos/lamb-cli/src/modes/send/include -I/home/chaos/lamb-cli/src/modes/request/include -I/home/chaos/lamb-cli/src/pwds/include -I/home/chaos/lamb-cli/src/utils/include -Wall -Wextra -Wpedantic -flto -O3 -Wno-strict-prototypes -o CMakeFiles/lambc.dir/src/pwds/cryptfiles.c.o -c /home/chaos/lamb-cli/src/pwds/cryptfiles.c",
-  "file": "/home/chaos/lamb-cli/src/pwds/cryptfiles.c",
-  "output": "CMakeFiles/lambc.dir/src/pwds/cryptfiles.c.o"
-},
-{
-  "directory": "/home/chaos/lamb-cli/build",
-  "command": "/etc/profiles/per-user/chaos/bin/cc  -I/home/chaos/lamb-cli/src/cli/include -I/home/chaos/lamb-cli/src/croco/include -I/home/chaos/lamb-cli/src/modes/send/include -I/home/chaos/lamb-cli/src/modes/request/include -I/home/chaos/lamb-cli/src/pwds/include -I/home/chaos/lamb-cli/src/utils/include -Wall -Wextra -Wpedantic -flto -O3 -Wno-strict-prototypes -o CMakeFiles/lambc.dir/src/pwds/cryptmisc.c.o -c /home/chaos/lamb-cli/src/pwds/cryptmisc.c",
-  "file": "/home/chaos/lamb-cli/src/pwds/cryptmisc.c",
-  "output": "CMakeFiles/lambc.dir/src/pwds/cryptmisc.c.o"
-},
-{
-  "directory": "/home/chaos/lamb-cli/build",
-  "command": "/etc/profiles/per-user/chaos/bin/cc  -I/home/chaos/lamb-cli/src/cli/include -I/home/chaos/lamb-cli/src/croco/include -I/home/chaos/lamb-cli/src/modes/send/include -I/home/chaos/lamb-cli/src/modes/request/include -I/home/chaos/lamb-cli/src/pwds/include -I/home/chaos/lamb-cli/src/utils/include -Wall -Wextra -Wpedantic -flto -O3 -Wno-strict-prototypes -o CMakeFiles/lambc.dir/src/pwds/cryptutil.c.o -c /home/chaos/lamb-cli/src/pwds/cryptutil.c",
-  "file": "/home/chaos/lamb-cli/src/pwds/cryptutil.c",
-  "output": "CMakeFiles/lambc.dir/src/pwds/cryptutil.c.o"
-},
-{
-  "directory": "/home/chaos/lamb-cli/build",
-  "command": "/etc/profiles/per-user/chaos/bin/cc  -I/home/chaos/lamb-cli/src/cli/include -I/home/chaos/lamb-cli/src/croco/include -I/home/chaos/lamb-cli/src/modes/send/include -I/home/chaos/lamb-cli/src/modes/request/include -I/home/chaos/lamb-cli/src/pwds/include -I/home/chaos/lamb-cli/src/utils/include -Wall -Wextra -Wpedantic -flto -O3 -Wno-strict-prototypes -o CMakeFiles/lambc.dir/src/utils/cfgd.c.o -c /home/chaos/lamb-cli/src/utils/cfgd.c",
+  "command": "/etc/profiles/per-user/chaos/bin/cc  -I/home/chaos/lamb-cli/src/cli/include -I/home/chaos/lamb-cli/src/croco/include -I/home/chaos/lamb-cli/src/modes/send/include -I/home/chaos/lamb-cli/src/modes/request/include -I/home/chaos/lamb-cli/src/utils/include -Wall -Wextra -Wpedantic -flto -O3 -Wno-strict-prototypes -o CMakeFiles/lambc.dir/src/utils/cfgd.c.o -c /home/chaos/lamb-cli/src/utils/cfgd.c",
   "file": "/home/chaos/lamb-cli/src/utils/cfgd.c",
   "output": "CMakeFiles/lambc.dir/src/utils/cfgd.c.o"
 }
