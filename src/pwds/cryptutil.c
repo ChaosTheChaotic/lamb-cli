@@ -1,4 +1,5 @@
 #include <openssl/evp.h>
+#include <openssl/sha.h>
 #include <openssl/rand.h>
 #include <stdlib.h>
 #include <string.h>
@@ -129,4 +130,10 @@ int dpwd(
 
   EVP_CIPHER_CTX_free(ctx);
   return 0;
+}
+
+int hpwd(const char *restrict plain, unsigned char *restrict hash) {
+  SHA256_CTX ctx;
+  // TODO: Figure out params for this funny thing
+  //SHA256(const unsigned char *d, size_t n, unsigned char *md)
 }

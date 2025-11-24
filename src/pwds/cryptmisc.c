@@ -21,13 +21,14 @@ int getpwds(char *restrict pwd) {
   char *uencp = getpass("No password file found\nEnter the password you would like to use: ");
   memcpy(pwd, uencp, strlen(uencp));
   unsigned char key[32];
-  if (genrndkey(key, sizeof(key)) == -1) {
-    fprintf(stderr, "Failed to get random number from /dev/urandom\nFalling back to the rand function");
-    srand(time(NULL)); // Seed the generator with the current time
-    for (size_t i = 0; i < sizeof(key); i++) {
-      key[i] = (unsigned char)rand(); // Generate pseudo random bytes as a fallback
-    }
-  }
+  //if (genrndkey(key, sizeof(key)) == -1) {
+  //  fprintf(stderr, "Failed to get random number from /dev/urandom\nFalling back to the rand function");
+  //  srand(time(NULL)); // Seed the generator with the current time
+  //  for (size_t i = 0; i < sizeof(key); i++) {
+  //    key[i] = (unsigned char)rand(); // Generate pseudo random bytes as a fallback
+  //  }
+  //}
+  char *getple = getpass("Enter the password to encrypt the croc password with: ");
   unsigned char *cptxt = NULL;
   unsigned int len = 0;
   if (epwd(uencp, (const char *)key, &cptxt, &len) != 0) {
