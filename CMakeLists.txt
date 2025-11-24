@@ -8,8 +8,6 @@ option(BUILD_OFFLINE "Build the croco library using the local version (use if yo
 
 include(ExternalProject)
 
-find_package(OpenSSL COMPONENTS Crypto REQUIRED)
-
 set(CROCO_DIR "${CMAKE_SOURCE_DIR}/vendor/croco")
 set(CROCO_BUILD_DIR "${CMAKE_BINARY_DIR}/croco")
 set(CROCO_LIB_DIR "${CMAKE_SOURCE_DIR}/lib")
@@ -20,7 +18,6 @@ set(INCLUDE_CLI "src/cli/include")
 set(INCLUDE_CROCO "src/croco/include")
 set(INCLUDE_SEND "src/modes/send/include")
 set(INCLUDE_REQUEST "src/modes/request/include")
-set(INCLUDE_PWDS "src/pwds/include")
 set(INCLUDE_UTILS "src/utils/include")
 
 file(GLOB SOURCE_CLI "src/cli/*.c")
@@ -34,9 +31,6 @@ file(GLOB HEADER_SEND "${INCLUDE_SEND}/*.h")
 
 file(GLOB SOURCE_REQUEST "src/modes/request/*.c")
 file(GLOB HEADER_REQUEST "${INCLUDE_REQUEST}/*.h")
-
-file(GLOB SOURCE_PWDS "src/pwds/*.c")
-file(GLOB HEADER_PWDS "${INCLUDE_PWDS}/*.h")
 
 file(GLOB SOURCE_UTILS "src/utils/*.c")
 file(GLOB HEADER_UTILS "${INCLUDE_UTILS}/*.h")
@@ -56,9 +50,6 @@ add_executable(
   ${SOURCE_REQUEST}
   ${HEADER_REQUEST}
 
-  ${SOURCE_PWDS}
-  ${HEADER_PWDS}
-
   ${SOURCE_UTILS}
   ${HEADER_UTILS}
 )
@@ -70,7 +61,6 @@ target_include_directories(
   ${INCLUDE_CROCO}
   ${INCLUDE_SEND}
   ${INCLUDE_REQUEST}
-  ${INCLUDE_PWDS}
   ${INCLUDE_UTILS}
 )
 
@@ -106,4 +96,4 @@ add_custom_target(croco_lib ALL DEPENDS ${CROCO_LIB_DIR}/libcroco.so)
 
 add_dependencies(lambc croco_lib)
 target_link_directories(lambc PRIVATE ${CROCO_LIB_DIR})
-target_link_libraries(lambc PRIVATE croco OpenSSL::Crypto)
+target_link_libraries(lambc PRIVATE croco)
