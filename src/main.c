@@ -27,7 +27,6 @@ int main(int argc, char** argv) {
 
     printf("Using mode %s\n", selected_cmd.name);
     if (strcmp(selected_cmd.name, "send") == 0) {
-      // Call send function here
       send(selected_cmd.arg_count, selected_cmd.args);
     } else if (strcmp(selected_cmd.name, "request") == 0) {
       // Call request function here
