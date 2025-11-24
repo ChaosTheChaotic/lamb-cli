@@ -5,7 +5,7 @@
 #include <sys/syscall.h>
 #include "keys.h"
 
-int store_pwd(char *restrict pwd) {
+int store_pwd(const char *restrict pwd) {
   if (!pwd) return -1;
 
   int kid = syscall(SYS_add_key, "user", "lamb_session_password", pwd, strlen(pwd), KEY_SPEC_USER_SESSION_KEYRING);
@@ -46,4 +46,10 @@ int clear_pwd(void) {
     }
     
     return syscall(SYS_keyctl, KEYCTL_UNLINK, key_id, KEY_SPEC_SESSION_KEYRING);
+}
+
+int prompt_pwd(const char *restrict prompt, char *restrict pbuf) {
+  const char *restrict pwd = getpass(prompt);
+  strcpy(pbuf, pwd);
+  return store_pwd(pwd);
 }
