@@ -45,10 +45,13 @@ int send(unsigned int argc, Arg *args) {
         prompt_pwd("Enter password (must be same as android): ", &pwd);
     }
 
-    // Create protocol header and serialize
     CrocoHeader header = {
         .protocolName = "send",
-        .extraOptFlags = NULL,
+        .extraOptFlags = (KeyValuePair[]){
+            {.key = "message", .value = msg},
+            // {.key = "another_key", .value = "another_value"}
+        },
+        .extraOptFlags_count = 1
     };
 
     char *serialized_header = CrocoHeader_serialize(&header);
