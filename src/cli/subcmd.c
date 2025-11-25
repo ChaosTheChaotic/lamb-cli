@@ -2,7 +2,11 @@
 
 Arg send_args[] = {
     {'m', STRING, false, {.str_val = ""}, false}, // Message flag
-    {'p', BOOL, false, {.bool_val = false}, false}, // Password flag (specify a new password to save)
+    {'p',
+     BOOL,
+     false,
+     {.bool_val = false},
+     false}, // Password flag (specify a new password to save)
 };
 const int send_arg_count = sizeof(send_args) / sizeof(Arg);
 

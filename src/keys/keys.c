@@ -1,20 +1,23 @@
-#include <unistd.h>
+#include "keys.h"
 #include <linux/keyctl.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdio.h>
 #include <sys/syscall.h>
-#include "keys.h"
+#include <unistd.h>
 
 int store_pwd(const char *restrict pwd) {
-  if (!pwd) return -1;
+  if (!pwd)
+    return -1;
 
-  int kid = syscall(SYS_add_key, "user", "lamb_session_password", pwd, strlen(pwd), KEY_SPEC_USER_SESSION_KEYRING);
+  int kid = syscall(SYS_add_key, "user", "lamb_session_password", pwd,
+                    strlen(pwd), KEY_SPEC_USER_SESSION_KEYRING);
   return kid;
 }
 
 char *get_pwd() {
-  int kid = syscall(SYS_keyctl, KEYCTL_SEARCH, KEY_SPEC_USER_SESSION_KEYRING, "user", "lamb_session_password", 0);
+  int kid = syscall(SYS_keyctl, KEYCTL_SEARCH, KEY_SPEC_USER_SESSION_KEYRING,
+                    "user", "lamb_session_password", 0);
   if (kid < 0) {
     return NULL;
   }
@@ -41,12 +44,13 @@ char *get_pwd() {
 
 // Just in case we need it
 int clear_pwd(void) {
-    int key_id = syscall(SYS_keyctl, KEYCTL_SEARCH, KEY_SPEC_SESSION_KEYRING, "user", "session_password", 0);
-    if (key_id < 0) {
-        return -1;
-    }
-    
-    return syscall(SYS_keyctl, KEYCTL_UNLINK, key_id, KEY_SPEC_SESSION_KEYRING);
+  int key_id = syscall(SYS_keyctl, KEYCTL_SEARCH, KEY_SPEC_SESSION_KEYRING,
+                       "user", "session_password", 0);
+  if (key_id < 0) {
+    return -1;
+  }
+
+  return syscall(SYS_keyctl, KEYCTL_UNLINK, key_id, KEY_SPEC_SESSION_KEYRING);
 }
 
 int prompt_pwd(const char *restrict prompt, char *restrict *restrict pbuf) {
