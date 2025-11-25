@@ -48,7 +48,7 @@ int send(unsigned int argc, Arg *args) {
     // Create protocol header and serialize
     CrocoHeader header = {
         .protocolName = "send",
-        .extraOptFlags = NULL,  // No extra options needed for basic send
+        .extraOptFlags = NULL,
     };
 
     char *serialized_header = CrocoHeader_serialize(&header);
