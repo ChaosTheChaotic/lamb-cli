@@ -1,5 +1,4 @@
 #include "liblambproto.h"
-#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -15,15 +14,23 @@ char *CrocoHeader_serialize(const CrocoHeader *header) {
 #define FIELD_STRING(name, _)                                                  \
   if (header->name)                                                            \
     total_size += strlen(header->name) + 1;
-#define FIELD_STRING_ARRAY(name, _)                                            \
-  if (header->name) {                                                          \
-    for (char **ptr = header->name; *ptr; ptr++) {                             \
-      total_size += strlen(*ptr) + 1;                                          \
+#define FIELD_KV_PAIRS(name, _)                                                \
+  if (header->name && header->name##_count > 0) {                              \
+    for (int i = 0; i < header->name##_count; i++) {                           \
+      if (header->name[i].key)                                                 \
+        total_size += strlen(header->name[i].key) + 1; /* +1 for '=' */        \
+      if (header->name[i].value)                                               \
+        total_size += strlen(header->name[i].value);                           \
+      if (i < header->name##_count - 1)                                        \
+        total_size += 1; /* for ',' */                                         \
     }                                                                          \
+    total_size += 1; /* for '|' */                                             \
+  } else {                                                                     \
+    total_size += 1; /* for empty field '|' */                                 \
   }
   PROTOCOL_FIELDS
 #undef FIELD_STRING
-#undef FIELD_STRING_ARRAY
+#undef FIELD_KV_PAIRS
 
   char *result = malloc(total_size);
   if (!result)
@@ -39,20 +46,28 @@ char *CrocoHeader_serialize(const CrocoHeader *header) {
     cursor += len;                                                             \
   }                                                                            \
   *cursor++ = '|';
-#define FIELD_STRING_ARRAY(name, _)                                            \
-  if (header->name) {                                                          \
-    for (char **ptr = header->name; *ptr; ptr++) {                             \
-      size_t len = strlen(*ptr);                                               \
-      memcpy(cursor, *ptr, len);                                               \
-      cursor += len;                                                           \
-      if (*(ptr + 1))                                                          \
+#define FIELD_KV_PAIRS(name, _)                                                \
+  if (header->name && header->name##_count > 0) {                              \
+    for (int i = 0; i < header->name##_count; i++) {                           \
+      if (header->name[i].key) {                                               \
+        size_t len = strlen(header->name[i].key);                              \
+        memcpy(cursor, header->name[i].key, len);                              \
+        cursor += len;                                                         \
+      }                                                                        \
+      *cursor++ = '=';                                                         \
+      if (header->name[i].value) {                                             \
+        size_t len = strlen(header->name[i].value);                            \
+        memcpy(cursor, header->name[i].value, len);                            \
+        cursor += len;                                                         \
+      }                                                                        \
+      if (i < header->name##_count - 1)                                        \
         *cursor++ = ',';                                                       \
     }                                                                          \
   }                                                                            \
   *cursor++ = '|';
   PROTOCOL_FIELDS
 #undef FIELD_STRING
-#undef FIELD_STRING_ARRAY
+#undef FIELD_KV_PAIRS
 
   cursor[-1] = '\0'; // Replace last '|' with null terminator
   return result;
@@ -86,29 +101,43 @@ bool CrocoHeader_deserialize(CrocoHeader *header, const char *data) {
 
     case 1: // extraOptFlags
       if (field_len > 0) {
-        // Count commas to determine array size
+        // Count key-value pairs by counting commas
         size_t count = 1;
         for (size_t i = 0; i < field_len; i++) {
           if (cursor[i] == ',')
             count++;
         }
 
-        header->extraOptFlags = malloc((count + 1) * sizeof(char *));
+        header->extraOptFlags = malloc(count * sizeof(KeyValuePair));
+        header->extraOptFlags_count = 0;
+
         char *temp = malloc(field_len + 1);
         memcpy(temp, cursor, field_len);
         temp[field_len] = '\0';
 
         char *token = strtok(temp, ",");
-        size_t idx = 0;
-        while (token) {
-          header->extraOptFlags[idx] = strdup(token);
+        while (token && (size_t)header->extraOptFlags_count < count) {
+          char *equal_sign = strchr(token, '=');
+          if (equal_sign) {
+            // Split key and value
+            *equal_sign = '\0';
+            header->extraOptFlags[header->extraOptFlags_count].key =
+                strdup(token);
+            header->extraOptFlags[header->extraOptFlags_count].value =
+                strdup(equal_sign + 1);
+          } else {
+            // No value, just key
+            header->extraOptFlags[header->extraOptFlags_count].key =
+                strdup(token);
+            header->extraOptFlags[header->extraOptFlags_count].value = NULL;
+          }
+          header->extraOptFlags_count++;
           token = strtok(NULL, ",");
-          idx++;
         }
-        header->extraOptFlags[idx] = NULL;
         free(temp);
       } else {
         header->extraOptFlags = NULL;
+        header->extraOptFlags_count = 0;
       }
       break;
     }
@@ -120,4 +149,28 @@ bool CrocoHeader_deserialize(CrocoHeader *header, const char *data) {
   }
 
   return true;
+}
+
+// Helper function to free the header
+void CrocoHeader_free(CrocoHeader *header) {
+  if (!header)
+    return;
+
+#define FIELD_STRING(name, _)                                                  \
+  if (header->name)                                                            \
+    free(header->name);
+#define FIELD_KV_PAIRS(name, _)                                                \
+  if (header->name) {                                                          \
+    for (int i = 0; i < header->name##_count; i++) {                           \
+      if (header->name[i].key)                                                 \
+        free(header->name[i].key);                                             \
+      if (header->name[i].value)                                               \
+        free(header->name[i].value);                                           \
+    }                                                                          \
+    free(header->name);                                                        \
+    header->name##_count = 0;                                                  \
+  }
+  PROTOCOL_FIELDS
+#undef FIELD_STRING
+#undef FIELD_KV_PAIRS
 }
