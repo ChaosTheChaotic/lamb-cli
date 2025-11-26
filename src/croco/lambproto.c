@@ -15,8 +15,7 @@ void CrocoHeader_init(CrocoHeader* header) {
 #undef FIELD_KV_PAIRS
 }
 
-// Helper function to parse key-value pairs
-static bool parse_key_value_pairs(const char* data, size_t len, 
+bool parse_key_value_pairs(const char* data, size_t len, 
                                  KeyValuePair** pairs, int* count) {
     if (len == 0) {
         *pairs = NULL;
@@ -197,7 +196,6 @@ bool CrocoHeader_deserialize(CrocoHeader* header, const char* data) {
     return true;
 }
 
-// Helper function to free the header
 void CrocoHeader_free(CrocoHeader* header) {
     if (!header) return;
 
