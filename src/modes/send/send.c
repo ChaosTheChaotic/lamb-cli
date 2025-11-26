@@ -45,18 +45,19 @@ int send(unsigned int argc, Arg *args) {
         prompt_pwd("Enter password (must be same as android): ", &pwd);
     }
 
-    CrocoHeader header = {
-        .protocolName = "send",
-        .extraOptFlags = (KeyValuePair[]){
-            {.key = "message", .value = msg},
-            // {.key = "another_key", .value = "another_value"}
-        },
-        .extraOptFlags_count = 1
-    };
+    CrocoHeader header;
+    CrocoHeader_init(&header);
+    
+    header.protocolName = strdup("send");
+    header.extraOptFlags = malloc(sizeof(KeyValuePair));
+    header.extraOptFlags[0].key = strdup("message");
+    header.extraOptFlags[0].value = strdup(msg);
+    header.extraOptFlags_count = 1;
 
     char *serialized_header = CrocoHeader_serialize(&header);
     if (!serialized_header) {
         fprintf(stderr, "Failed to serialize protocol header");
+        CrocoHeader_free(&header);
         if (cliflag) free(msg);
         free(pwd);
         return -1;
@@ -66,6 +67,7 @@ int send(unsigned int argc, Arg *args) {
     printf("%s", res);
 
     free(serialized_header);
+    CrocoHeader_free(&header);
     if (cliflag) free(msg);
     free(pwd);
     return 0;

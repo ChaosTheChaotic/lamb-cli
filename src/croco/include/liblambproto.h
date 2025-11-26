@@ -18,12 +18,6 @@ typedef struct {
     char* value;
 } KeyValuePair;
 
-typedef struct {
-    const char* key;
-    FieldType type;
-    void* value;
-} ProtocolField;
-
 // Main protocol structure
 typedef struct {
 #define FIELD_STRING(name, _) char* name;
@@ -33,8 +27,10 @@ typedef struct {
 #undef FIELD_KV_PAIRS
 } CrocoHeader;
 
-// Serialization function
+// Serialization/deserialization functions
 char* CrocoHeader_serialize(const CrocoHeader* header);
 bool CrocoHeader_deserialize(CrocoHeader* header, const char* data);
+void CrocoHeader_free(CrocoHeader* header);
+void CrocoHeader_init(CrocoHeader* header);
 
 #endif
