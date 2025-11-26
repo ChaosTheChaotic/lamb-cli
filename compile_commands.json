@@ -31,6 +31,12 @@
 },
 {
   "directory": "/home/chaos/lamb-cli/build",
+  "command": "/etc/profiles/per-user/chaos/bin/cc  -I/home/chaos/lamb-cli/src/cli/include -I/home/chaos/lamb-cli/src/croco/include -I/home/chaos/lamb-cli/src/modes/send/include -I/home/chaos/lamb-cli/src/modes/request/include -I/home/chaos/lamb-cli/src/utils/include -I/home/chaos/lamb-cli/src/keys/include -Wall -Wextra -Wpedantic -flto -O3 -Wno-strict-prototypes -o CMakeFiles/lambc.dir/src/modes/request/request.c.o -c /home/chaos/lamb-cli/src/modes/request/request.c",
+  "file": "/home/chaos/lamb-cli/src/modes/request/request.c",
+  "output": "CMakeFiles/lambc.dir/src/modes/request/request.c.o"
+},
+{
+  "directory": "/home/chaos/lamb-cli/build",
   "command": "/etc/profiles/per-user/chaos/bin/cc  -I/home/chaos/lamb-cli/src/cli/include -I/home/chaos/lamb-cli/src/croco/include -I/home/chaos/lamb-cli/src/modes/send/include -I/home/chaos/lamb-cli/src/modes/request/include -I/home/chaos/lamb-cli/src/utils/include -I/home/chaos/lamb-cli/src/keys/include -Wall -Wextra -Wpedantic -flto -O3 -Wno-strict-prototypes -o CMakeFiles/lambc.dir/src/utils/cfgd.c.o -c /home/chaos/lamb-cli/src/utils/cfgd.c",
   "file": "/home/chaos/lamb-cli/src/utils/cfgd.c",
   "output": "CMakeFiles/lambc.dir/src/utils/cfgd.c.o"
