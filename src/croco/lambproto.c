@@ -18,6 +18,77 @@ void CrocoHeader_init(CrocoHeader *header) {
 #undef FIELD_KV_PAIRS
 }
 
+char *escape_string(const char *input) {
+  if (!input)
+    return NULL;
+
+  // Calculate required length
+  size_t len = 0;
+  for (const char *p = input; *p; p++) {
+    if (*p == '\\' || *p == '|' || *p == '=' || *p == ',') {
+      len += 2; // character + escape
+    } else {
+      len += 1;
+    }
+  }
+
+  // Allocate and escape
+  char *result = malloc(len + 1);
+  if (!result)
+    return NULL;
+
+  char *out = result;
+  for (const char *p = input; *p; p++) {
+    if (*p == '\\' || *p == '|' || *p == '=' || *p == ',') {
+      *out++ = '\\';
+      *out++ = *p;
+    } else {
+      *out++ = *p;
+    }
+  }
+  *out = '\0';
+
+  return result;
+}
+
+char *unescape_string(const char *input, size_t len) {
+  if (len == 0) {
+    char *result = malloc(1);
+    if (result)
+      result[0] = '\0';
+    return result;
+  }
+
+  // Clculate required length
+  size_t output_len = 0;
+  for (size_t i = 0; i < len; i++) {
+    if (input[i] == '\\' && i + 1 < len) {
+      // Skip the backslash, count the escaped character
+      i++;
+    }
+    output_len++;
+  }
+
+  // Allocate and unescape
+  char *result = malloc(output_len + 1);
+  if (!result)
+    return NULL;
+
+  char *out = result;
+  for (size_t i = 0; i < len; i++) {
+    if (input[i] == '\\' && i + 1 < len) {
+      // Copy the escaped character
+      i++;
+      *out++ = input[i];
+    } else {
+      *out++ = input[i];
+    }
+  }
+  *out = '\0';
+
+  return result;
+}
+
 bool parse_key_value_pairs(const char *data, size_t len, KeyValuePair **pairs,
                            int *count) {
   if (len == 0) {
@@ -26,60 +97,78 @@ bool parse_key_value_pairs(const char *data, size_t len, KeyValuePair **pairs,
     return true;
   }
 
-  // Count key-value pairs
+  // Count key-value pairs (respecting escaped commas)
   size_t pair_count = 1;
   for (size_t i = 0; i < len; i++) {
-    if (data[i] == ',')
+    if (data[i] == '\\' && i + 1 < len) {
+      i++; // Skip escaped character
+    } else if (data[i] == ',') {
       pair_count++;
+    }
   }
 
   KeyValuePair *result = malloc(pair_count * sizeof(KeyValuePair));
   if (!result)
     return false;
 
-  char *temp = malloc(len + 1);
-  if (!temp) {
-    free(result);
-    return false;
-  }
-  memcpy(temp, data, len);
-  temp[len] = '\0';
+  // Parse each pair
+  size_t start = 0;
+  size_t pair_index = 0;
 
-  char *token = strtok(temp, ",");
-  size_t index = 0;
-  while (token && index < pair_count) {
-    char *equal_sign = strchr(token, '=');
-    if (equal_sign) {
-      *equal_sign = '\0';
-      result[index].key = strdup(token);
-      result[index].value = strdup(equal_sign + 1);
-    } else {
-      result[index].key = strdup(token);
-      result[index].value = NULL;
-    }
+  for (size_t i = 0; i <= len; i++) {
+    if (i == len || (data[i] == ',' && !(i > 0 && data[i - 1] == '\\'))) {
+      // Found a pair boundary
+      size_t pair_len = i - start;
 
-    if (!result[index].key) {
-      // Cleanup on failure
-      for (size_t i = 0; i < index; i++) {
-        free(result[i].key);
-        free(result[i].value);
+      if (pair_len > 0) {
+        // Find the first unescaped equals sign
+        size_t equal_pos = (size_t)-1;
+        for (size_t j = start; j < start + pair_len; j++) {
+          if (data[j] == '\\' && j + 1 < start + pair_len) {
+            j++; // Skip escaped character
+          } else if (data[j] == '=') {
+            equal_pos = j;
+            break;
+          }
+        }
+
+        if (equal_pos != (size_t)-1) {
+          // Key and value both present
+          size_t key_len = equal_pos - start;
+          size_t value_len = (start + pair_len) - equal_pos - 1;
+
+          result[pair_index].key = unescape_string(data + start, key_len);
+          result[pair_index].value =
+              unescape_string(data + equal_pos + 1, value_len);
+        } else {
+          // Only key present
+          result[pair_index].key = unescape_string(data + start, pair_len);
+          result[pair_index].value = NULL;
+        }
+
+        if (!result[pair_index].key) {
+          // Cleanup on failure
+          for (size_t j = 0; j < pair_index; j++) {
+            free(result[j].key);
+            free(result[j].value);
+          }
+          free(result);
+          return false;
+        }
+
+        pair_index++;
       }
-      free(result);
-      free(temp);
-      return false;
-    }
 
-    index++;
-    token = strtok(NULL, ",");
+      start = i + 1; // Move past the comma
+    }
   }
 
   *pairs = result;
-  *count = index;
-  free(temp);
+  *count = pair_index;
   return true;
 }
 
-// Serialize header to string
+// Serialize header to string with escaped character support
 char *CrocoHeader_serialize(const CrocoHeader *header) {
   if (!header)
     return NULL;
@@ -88,16 +177,32 @@ char *CrocoHeader_serialize(const CrocoHeader *header) {
   size_t total_size = 1; // Null terminator
 
 #define FIELD_STRING(name, _)                                                  \
-  if (header->name)                                                            \
-    total_size += strlen(header->name);                                        \
+  if (header->name) {                                                          \
+    char *escaped = escape_string(header->name);                               \
+    if (escaped) {                                                             \
+      total_size += strlen(escaped);                                           \
+      free(escaped);                                                           \
+    }                                                                          \
+  }                                                                            \
   total_size += 1; /* for '|' */
 #define FIELD_KV_PAIRS(name, _)                                                \
   if (header->name && header->name##_count > 0) {                              \
     for (int i = 0; i < header->name##_count; i++) {                           \
-      if (header->name[i].key)                                                 \
-        total_size += strlen(header->name[i].key) + 1; /* +1 for '=' */        \
-      if (header->name[i].value)                                               \
-        total_size += strlen(header->name[i].value);                           \
+      if (header->name[i].key) {                                               \
+        char *escaped_key = escape_string(header->name[i].key);                \
+        if (escaped_key) {                                                     \
+          total_size += strlen(escaped_key);                                   \
+          free(escaped_key);                                                   \
+        }                                                                      \
+      }                                                                        \
+      total_size += 1; /* for '=' */                                           \
+      if (header->name[i].value) {                                             \
+        char *escaped_value = escape_string(header->name[i].value);            \
+        if (escaped_value) {                                                   \
+          total_size += strlen(escaped_value);                                 \
+          free(escaped_value);                                                 \
+        }                                                                      \
+      }                                                                        \
       if (i < header->name##_count - 1)                                        \
         total_size += 1; /* for ',' */                                         \
     }                                                                          \
@@ -116,24 +221,36 @@ char *CrocoHeader_serialize(const CrocoHeader *header) {
   // Serialize fields
 #define FIELD_STRING(name, _)                                                  \
   if (header->name) {                                                          \
-    size_t len = strlen(header->name);                                         \
-    memcpy(cursor, header->name, len);                                         \
-    cursor += len;                                                             \
+    char *escaped = escape_string(header->name);                               \
+    if (escaped) {                                                             \
+      size_t len = strlen(escaped);                                            \
+      memcpy(cursor, escaped, len);                                            \
+      cursor += len;                                                           \
+      free(escaped);                                                           \
+    }                                                                          \
   }                                                                            \
   *cursor++ = '|';
 #define FIELD_KV_PAIRS(name, _)                                                \
   if (header->name && header->name##_count > 0) {                              \
     for (int i = 0; i < header->name##_count; i++) {                           \
       if (header->name[i].key) {                                               \
-        size_t len = strlen(header->name[i].key);                              \
-        memcpy(cursor, header->name[i].key, len);                              \
-        cursor += len;                                                         \
+        char *escaped_key = escape_string(header->name[i].key);                \
+        if (escaped_key) {                                                     \
+          size_t len = strlen(escaped_key);                                    \
+          memcpy(cursor, escaped_key, len);                                    \
+          cursor += len;                                                       \
+          free(escaped_key);                                                   \
+        }                                                                      \
       }                                                                        \
       *cursor++ = '=';                                                         \
       if (header->name[i].value) {                                             \
-        size_t len = strlen(header->name[i].value);                            \
-        memcpy(cursor, header->name[i].value, len);                            \
-        cursor += len;                                                         \
+        char *escaped_value = escape_string(header->name[i].value);            \
+        if (escaped_value) {                                                   \
+          size_t len = strlen(escaped_value);                                  \
+          memcpy(cursor, escaped_value, len);                                  \
+          cursor += len;                                                       \
+          free(escaped_value);                                                 \
+        }                                                                      \
       }                                                                        \
       if (i < header->name##_count - 1)                                        \
         *cursor++ = ',';                                                       \
@@ -148,7 +265,7 @@ char *CrocoHeader_serialize(const CrocoHeader *header) {
   return result;
 }
 
-// Deserialize string to header
+// Deserialize string to header with escaped character support
 bool CrocoHeader_deserialize(CrocoHeader *header, const char *data) {
   if (!header || !data)
     return false;
@@ -160,11 +277,20 @@ bool CrocoHeader_deserialize(CrocoHeader *header, const char *data) {
   int field_index = 0;
 
   while (*cursor) {
-    const char *field_end = strchr(cursor, '|');
+    // Find field end, respecting escaped pipes
+    const char *field_end = NULL;
+    for (const char *p = cursor; *p; p++) {
+      if (*p == '\\' && *(p + 1)) {
+        p++; // Skip escaped character
+      } else if (*p == '|') {
+        field_end = p;
+        break;
+      }
+    }
     if (!field_end)
       field_end = cursor + strlen(cursor);
 
-    size_t field_len = field_len = field_end - cursor;
+    size_t field_len = field_end - cursor;
 
     // Use the macro to handle field deserialization
     bool field_processed = false;
@@ -172,9 +298,11 @@ bool CrocoHeader_deserialize(CrocoHeader *header, const char *data) {
 #define FIELD_STRING(name, idx)                                                \
   if (field_index == idx) {                                                    \
     if (field_len > 0) {                                                       \
-      header->name = malloc(field_len + 1);                                    \
-      memcpy(header->name, cursor, field_len);                                 \
-      header->name[field_len] = '\0';                                          \
+      header->name = unescape_string(cursor, field_len);                       \
+      if (!header->name) {                                                     \
+        CrocoHeader_free(header);                                              \
+        return false;                                                          \
+      }                                                                        \
     }                                                                          \
     field_processed = true;                                                    \
   }
