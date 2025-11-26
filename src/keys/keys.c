@@ -35,6 +35,7 @@ char *get_pwd() {
   long ret = syscall(SYS_keyctl, KEYCTL_READ, kid, buf, klen);
   if (ret < 0) {
     free(buf);
+    buf = NULL;
     return NULL;
   }
 
