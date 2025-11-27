@@ -3,6 +3,6 @@
 
 #include "subcmd.h"
 
-int send(int argc, Arg *args);
+int send(unsigned int argc, Arg *args);
 
 #endif

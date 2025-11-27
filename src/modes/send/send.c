@@ -6,6 +6,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include "send.h"
 
 int send(unsigned int argc, Arg *args) {
     char *msg = NULL;
