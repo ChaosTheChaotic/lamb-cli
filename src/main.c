@@ -8,14 +8,14 @@
 void printHelp(char *path) {
   printf("Usage: %s <subcommand> [flags]\n", path);
   printf("subcommands:\n");
-  printf("send: sends a string to appear as a notification on the linked android");
+  printf("send: sends a string to appear as a notification on the linked android\n");
   printf("send has custom args:\n");
-  printf("-m sends a custom message");
-  printf("-p allows specifying a new password");
-  printf("request: requests a file from the android");
+  printf("-m sends a custom message\n");
+  printf("-p allows specifying a new password\n");
+  printf("request: requests a file from the android\n");
   printf("request has custom args:\n");
-  printf("-i for a custom input file");
-  printf("-p allows specifying a new password");
+  printf("-i for a custom input file\n");
+  printf("-p allows specifying a new password\n");
 }
 
 int main(int argc, char **argv) {
