@@ -27,7 +27,7 @@ char *get_pwd() {
     return NULL;
   }
 
-  char *buf = (char *)malloc(klen + 1);
+  char *buf = malloc(klen + 1);
   if (!buf) {
     return NULL;
   }
