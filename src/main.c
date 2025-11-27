@@ -1,12 +1,26 @@
 #include "parser.h"
 #include "send.h"
+#include "request.h"
 #include "subcmd.h"
 #include <stdio.h>
 #include <string.h>
 
+void printHelp(char *path) {
+  printf("Usage: %s <subcommand> [flags]\n", path);
+  printf("subcommands:\n");
+  printf("send: sends a string to appear as a notification on the linked android");
+  printf("send has custom args:\n");
+  printf("-m sends a custom message");
+  printf("-p allows specifying a new password");
+  printf("request: requests a file from the android");
+  printf("request has custom args:\n");
+  printf("-i for a custom input file");
+  printf("-p allows specifying a new password");
+}
+
 int main(int argc, char **argv) {
   if (argc < 2) {
-    printf("Usage: %s <subcommand> [flags]\n", argv[0]);
+    printHelp(argv[0]);
     return 1;
   }
 
@@ -29,7 +43,9 @@ int main(int argc, char **argv) {
   if (strcmp(selected_cmd.name, "send") == 0) {
     send(selected_cmd.arg_count, selected_cmd.args);
   } else if (strcmp(selected_cmd.name, "request") == 0) {
-    // Call request function here
+    request(selected_cmd.arg_count, selected_cmd.args);
+  } else {
+    printHelp(argv[0]);
   }
   return 0;
 }
