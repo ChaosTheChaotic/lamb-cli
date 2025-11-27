@@ -12,7 +12,7 @@ const int send_arg_count = sizeof(send_args) / sizeof(Arg);
 
 Arg request_args[] = {
     {'p', BOOL, false, {.bool_val = false}, false},
-    {'i', STRING, false, {.str_val = ""},false},
+    {'i', STRING, false, {.str_val = ""}, false},
 };
 const int request_arg_count = sizeof(request_args) / sizeof(Arg);
 
