@@ -1,13 +1,15 @@
 cmake_minimum_required(VERSION 3.22.1)
 
+option (CCACHE_ENABLED "Use ccache to speed up rebuilds" ON)
 find_program(USE_CCACHE ccache)
 
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
-if (USE_CCACHE)
+if (USE_CCACHE AND CCACHE_ENABLED)
+  message(STATUS "Using ${USE_CCACHE} as compiler launcher")
   set(CMAKE_C_COMPILER_LAUNCHER ccache)
   set(CMAKE_CXX_COMPILER_LAUNCHER ccache)
 endif()
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 project("lamb-cli")
 
